@@ -1,14 +1,14 @@
 [package]
 name = "nzxtcli"
 description = "A simple NZXT tool for managing fans and LEDs"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 rust-version = "1.85.0"
 repository = "https://github.com/rexagon/nzxtcli"
 license = "MIT"
 
 [profile.release]
-lto = "thin"
+lto = "fat"
 codegen-units = 1
 panic = "abort"
 
@@ -22,8 +22,6 @@ hidapi = { version = "2.6.3", default-features = false, features = ["linux-stati
 libc = "0.2"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = { version = "1.0", features = ["preserve_order"] }
-tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
 [build-dependencies]
 anyhow = "1.0"

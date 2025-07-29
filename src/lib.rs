@@ -1,9 +1,9 @@
-use std::sync::OnceLock;
+use std::sync::{Mutex, OnceLock};
 
 use hidapi::HidApi;
 
 pub use self::controller::{ChannelDeviceInfo, LedMode, NZXTHue2Controller, RgbChannel};
-pub use self::types::{Color, Version};
+pub use self::types::Color;
 
 mod controller;
 mod types;
@@ -19,35 +19,26 @@ pub fn version_string() -> &'static str {
 
 pub fn find_controllers<'a>(api: &'a HidApi) -> Vec<NZXTHue2Controller<'a>> {
     let known = NZXTHue2Controller::known_controllers();
-    let mut result = Vec::new();
+    let result = Mutex::new(Vec::new());
 
-    for device in api.device_list() {
-        if device.vendor_id() != NZXT_VID {
-            continue;
-        }
-
-        let span = tracing::debug_span!(
-            "device",
-            id = %format_args!("{:04x}:{:04x}", device.vendor_id(), device.product_id()),
-            name = device.product_string().unwrap_or("<unknown>"),
-        );
-        let _guard = span.enter();
-
-        if let Some(&(name, rgb_channels, fan_channels)) = known.get(&device.product_id()) {
-            match NZXTHue2Controller::new(api, device, name, rgb_channels, fan_channels) {
-                Ok(entry) => {
-                    tracing::debug!("found NZXT device");
-                    result.push(entry)
-                }
-                Err(e) => {
-                    tracing::debug!("failed to create controller: {e:?}");
-                    continue;
-                }
+    std::thread::scope(|scope| {
+        for device in api.device_list() {
+            if device.vendor_id() != NZXT_VID {
+                continue;
             }
-        } else {
-            tracing::debug!("skipping unknown device")
-        }
-    }
 
-    result
+            scope.spawn(|| {
+                if let Some(&(name, rgb_channels, fan_channels)) = known.get(&device.product_id()) {
+                    match NZXTHue2Controller::new(api, device, name, rgb_channels, fan_channels) {
+                        Ok(entry) => result.lock().unwrap().push(entry),
+                        Err(e) => {
+                            eprintln!("failed to create controller: {e:?}");
+                        }
+                    }
+                }
+            });
+        }
+    });
+
+    result.into_inner().unwrap()
 }

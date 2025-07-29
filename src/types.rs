@@ -1,8 +1,5 @@
 use std::str::FromStr;
 
-// Major, Minor, Patch
-pub type Version = (u8, u8, u8);
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(transparent)]
 pub struct Color([u8; 3]);

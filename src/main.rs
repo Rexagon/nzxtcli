@@ -18,8 +18,6 @@ fn main() -> Result<()> {
         unsafe { std::env::set_var("RUST_LIB_BACKTRACE", "0") };
     }
 
-    init_logger();
-
     match App::parse().cmd {
         SubCmd::List(cmd) => cmd.run(),
         SubCmd::SetColor(cmd) => cmd.run(),
@@ -54,7 +52,6 @@ impl CmdList {
         for controller in controllers {
             let vendor_id = controller.info().vendor_id();
             let product_id = controller.info().product_id();
-            let (major, minor, patch) = controller.firmware_version();
 
             let rgb_channels = controller.rgb_channels();
             let rgb_channels = rgb_channels
@@ -93,7 +90,6 @@ impl CmdList {
                 "product_id": product_id,
                 "product_id_hex": format!("{product_id:04x}"),
                 "name": controller.name(),
-                "firmware_version": format!("{major}.{minor}.{patch}"),
                 "rgb_channels": rgb_channels,
             }));
         }
@@ -134,43 +130,4 @@ fn print_json<T: Serialize>(output: T) -> Result<()> {
 
     println!("{output}");
     Ok(())
-}
-
-fn init_logger() {
-    use tracing_subscriber::layer::SubscriberExt;
-    use tracing_subscriber::util::SubscriberInitExt;
-    use tracing_subscriber::{EnvFilter, Layer, fmt};
-
-    let Ok(env) = std::env::var(EnvFilter::DEFAULT_ENV) else {
-        return;
-    };
-
-    let fmt_layer = if is_systemd_child() {
-        fmt::layer().without_time().with_ansi(false).boxed()
-    } else if !std::io::stdout().is_terminal() {
-        fmt::layer().with_ansi(false).boxed()
-    } else {
-        fmt::layer().boxed()
-    };
-
-    tracing_subscriber::registry()
-        .with(EnvFilter::try_new(env).expect("invalid filter"))
-        .with(fmt_layer)
-        .init();
-}
-
-fn is_systemd_child() -> bool {
-    #[cfg(target_os = "linux")]
-    unsafe {
-        libc::getppid() == 1
-            || std::env::var("SYSTEMD_EXEC_PID")
-                .ok()
-                .and_then(|s| s.parse::<i64>().ok())
-                .is_some()
-    }
-
-    #[cfg(not(target_os = "linux"))]
-    {
-        false
-    }
 }

@@ -4,14 +4,13 @@ use std::sync::OnceLock;
 use anyhow::Result;
 use hidapi::HidResult;
 
-use crate::types::{Color, Version};
+use crate::types::Color;
 
 pub struct NZXTHue2Controller<'a> {
     device: hidapi::HidDevice,
     info: &'a hidapi::DeviceInfo,
     name: &'static str,
     rgb_channels: Vec<RgbChannel>,
-    firmware_version: Version,
 }
 
 /// Name, RGB Channels, Fan Channels
@@ -61,17 +60,13 @@ impl<'a> NZXTHue2Controller<'a> {
         _fan_channels: usize,
     ) -> Result<Self> {
         let device = api.open_path(info.path())?;
-        let firmware_version = send_firmware_request(&device)?;
         let rgb_channels = get_channels_info(&device, rgb_channels)?;
-
-        tracing::debug!(?firmware_version);
 
         Ok(Self {
             device,
             info,
             name,
             rgb_channels,
-            firmware_version,
         })
     }
 
@@ -81,10 +76,6 @@ impl<'a> NZXTHue2Controller<'a> {
 
     pub fn name(&self) -> &'static str {
         self.name
-    }
-
-    pub fn firmware_version(&self) -> Version {
-        self.firmware_version
     }
 
     pub fn rgb_channels(&self) -> &[RgbChannel] {
@@ -99,23 +90,6 @@ impl<'a> NZXTHue2Controller<'a> {
         }
         Ok(())
     }
-}
-
-fn send_firmware_request(device: &hidapi::HidDevice) -> HidResult<Version> {
-    let mut buffer = [0u8; 64];
-    buffer[0] = 0x10;
-    buffer[1] = 0x01;
-    device.write(&buffer)?;
-
-    // TODO: Add some iterations check
-    loop {
-        let ret_val = device.read(&mut buffer)?;
-        if ret_val == 64 && buffer[0] == 0x11 && buffer[1] == 0x01 {
-            break;
-        }
-    }
-
-    Ok((buffer[0x11], buffer[0x12], buffer[0x13]))
 }
 
 fn get_channels_info(
@@ -170,8 +144,6 @@ fn get_channels_info(
             if led_count == 0 {
                 continue;
             }
-
-            tracing::debug!(device_id = %format_args!("0x{id:02x}"), led_count);
 
             channel_info.led_count += led_count as usize;
             channel_info.devices[dev] = ChannelDeviceInfo {
