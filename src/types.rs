@@ -32,6 +32,14 @@ impl Color {
     pub const fn blue(&self) -> u8 {
         self.0[2]
     }
+
+    pub const fn inner(&self) -> &[u8; 3] {
+        &self.0
+    }
+
+    pub const fn inner_mut(&mut self) -> &mut [u8; 3] {
+        &mut self.0
+    }
 }
 
 impl std::fmt::Display for Color {
