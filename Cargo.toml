@@ -1,9 +1,9 @@
 [package]
 name = "nzxtcli"
 description = "A simple NZXT tool for managing fans and LEDs"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
-rust-version = "1.85.0"
+rust-version = "1.87.0"
 repository = "https://github.com/rexagon/nzxtcli"
 license = "MIT"
 

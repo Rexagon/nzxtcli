@@ -113,6 +113,26 @@ Set the same color for all LEDs on all devices:
 nzxtcli set-color ffaabb
 ```
 
+Sync LEDs color to the CPU temp (or any other temperatur sensor).
+Use `sensors` to find preferred temperature source, then run
+```bash
+for i in /sys/class/hwmon/hwmon*/temp*_input; do
+  echo "$(<$(dirname $i)/name): $(cat ${i%_*}_label 2>/dev/null || echo $(basename ${i%_*})) $(readlink -f $i)";
+done
+```
+to find path to desired file.
+
+Then run this tool:
+```bash
+nzxtcli cpu-temp \
+    /sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon4/temp1_input \
+    --interval 100ms \
+    --base 20 \
+    --warn 90
+```
+
+> You can create a systemd service for this command, see [the example](./contrib/cpu-temp.service).
+
 ## License
 
 Licensed under MIT license ([LICENSE](./LICENSE) or <https://opensource.org/licenses/MIT>)

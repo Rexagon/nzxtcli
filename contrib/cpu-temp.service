@@ -1,0 +1,17 @@
+[Unit]
+Description=Tycho Node
+After=network.target
+StartLimitIntervalSec=0
+
+# NOTE: Your path to the sensor output will be different.
+
+[Service]
+Type=simple
+ExecStart=/home/ivan/.cargo/bin/nzxtcli cpu-temp \
+    /sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon4/temp1_input \
+    --interval 100ms \
+    --base 20 \
+    --warn 90
+
+[Install]
+WantedBy=default.target
