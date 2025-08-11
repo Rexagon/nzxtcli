@@ -13,6 +13,14 @@ To build the tool from source code, You need:
 cargo install --path . --locked
 ```
 
+After that you need to install udev rules:
+```bash
+# Copy rules file
+sudo cp ./contrib/60-nzxtcli.rules /usr/lib/udev/rules.d/60-nzxtcli.rules
+# Reload rules
+sudo udevadm control --reload-rules && sudo udevadm trigger
+```
+
 ## How to use
 
 List all devices:

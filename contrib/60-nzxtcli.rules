@@ -1,0 +1,29 @@
+# NZXT Hue2 - DetectNZXTFanController
+SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="2009", TAG+="uaccess", TAG+="NZXT_RGB__Fan_Controller"
+SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="2010", TAG+="uaccess", TAG+="NZXT_RGB__Fan_Controller"
+SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="200e", TAG+="uaccess", TAG+="NZXT_RGB__Fan_Controller"
+SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="2011", TAG+="uaccess", TAG+="NZXT_RGB__Fan_Controller"
+SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="2019", TAG+="uaccess", TAG+="NZXT_RGB__Fan_Controller"
+SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="2020", TAG+="uaccess", TAG+="NZXT_RGB__Fan_Controller"
+SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="201f", TAG+="uaccess", TAG+="NZXT_RGB__Fan_Controller"
+SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="2022", TAG+="uaccess", TAG+="NZXT_RGB__Fan_Controller_2024"
+SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="201b", TAG+="uaccess", TAG+="NZXT_B650E_Motherboard"
+
+# NZXT Hue2 - DetectNZXTHue2
+SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="2001", TAG+="uaccess", TAG+="NZXT_Hue_2"
+SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="2002", TAG+="uaccess", TAG+="NZXT_Hue_2_Ambient"
+SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="2005", TAG+="uaccess", TAG+="NZXT_Hue_2_Motherboard"
+SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="200b", TAG+="uaccess", TAG+="NZXT_Hue_2_Motherboard"
+
+# NZXT Hue2 - DetectNZXTKrakenX3
+SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="2007", TAG+="uaccess", TAG+="NZXT_Kraken_X3_Series"
+SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="2014", TAG+="uaccess", TAG+="NZXT_Kraken_X3_Series_RGB"
+
+# NZXT Hue2 - DetectNZXTRGBController
+SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="2012", TAG+="uaccess", TAG+="NZXT_RGB_Controller"
+SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="2021", TAG+="uaccess", TAG+="NZXT_RGB_Controller"
+
+# NZXT Hue2 - DetectNZXTSmartDeviceV2
+SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="2006", TAG+="uaccess", TAG+="NZXT_Smart_Device_V2"
+SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="200d", TAG+="uaccess", TAG+="NZXT_Smart_Device_V2"
+SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="200f", TAG+="uaccess", TAG+="NZXT_Smart_Device_V2"
